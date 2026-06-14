@@ -1,0 +1,244 @@
+:root {
+    --bg-main: #0B0F19;
+    --bg-card: #131C2E;
+    --border-color: #22314D;
+    --text-primary: #FFFFFF;
+    --text-secondary: #8A99AD;
+    
+    /* Emotion Color Tokens */
+    --clr-happy: #00E676;
+    --clr-relax: #00B0FF;
+    --clr-alert: #FF9100;
+    --clr-angry: #FF3D00;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 10px;
+}
+
+.app-wrapper {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Header Component */
+.app-header {
+    padding: 12px 4px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.brand h1 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.badge {
+    font-size: 0.65rem;
+    background: var(--border-color);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    vertical-align: middle;
+}
+
+.subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Main Viewport Panel */
+.main-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.status-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #FFC107; /* Yellow standard standby */
+    box-shadow: 0 0 8px #FFC107;
+    transition: all 0.3s ease;
+}
+
+.status-indicator.ready { background: #2196F3; box-shadow: 0 0 8px #2196F3; }
+.status-indicator.active { background: var(--clr-happy); box-shadow: 0 0 8px var(--clr-happy); }
+.status-indicator.error { background: var(--clr-angry); box-shadow: 0 0 8px var(--clr-angry); }
+
+/* Camera Viewport */
+.video-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #05080F;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.viewport-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+}
+
+/* Cinematic UI Framing Elements */
+.corner-targets .target {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+}
+.tl { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+.tr { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+.bl { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+.br { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+
+/* Interactive Call To Action Trigger */
+.cta-button {
+    position: absolute;
+    padding: 14px 28px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: #FFFFFF;
+    color: #000000;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cta-button:active { transform: scale(0.97); }
+.cta-button:disabled {
+    background-color: #1F2A40;
+    color: var(--text-secondary);
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* Metrics Dashboard Component */
+.dashboard-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 18px;
+}
+
+.section-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 14px;
+}
+
+.metrics-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.metric-card {
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid transparent;
+    padding: 12px 14px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+/* Glow layout for active high-probability state */
+.metric-card.active-state {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.metric-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.metric-card.active-state .metric-name {
+    color: var(--text-primary);
+}
+
+.metric-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: monospace;
+}
+
+.progress-track {
+    width: 100%;
+    height: 6px;
+    background: #1B263B;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    transition: width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.happy-bar { background: var(--clr-happy); }
+.relax-bar { background: var(--clr-relax); }
+.alert-bar { background: var(--clr-alert); }
+.angry-bar { background: var(--clr-angry); }

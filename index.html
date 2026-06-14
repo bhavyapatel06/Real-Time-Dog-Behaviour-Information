@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dog Behaviour Information</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="brand">
+                <span class="brand-icon">🐶</span>
+                <h1>Dog Behaviour Information <span class="badge">v2.0</span></h1>
+            </div>
+            <p class="subtitle">Real-time emotional tracking & behavioral telemetry</p>
+        </header>
+
+        <main class="main-panel">
+            <div class="status-banner">
+                <span class="status-indicator" id="status-dot"></span>
+                <span id="status-text">Initializing core systems...</span>
+            </div>
+
+            <div class="video-viewport">
+                <video id="webcam" autoplay playsinline muted></video>
+                <div class="viewport-overlay">
+                    <div class="scan-lines"></div>
+                    <div class="corner-targets">
+                        <div class="target tl"></div>
+                        <div class="target tr"></div>
+                        <div class="target bl"></div>
+                        <div class="target br"></div>
+                    </div>
+                </div>
+                <button id="start-btn" class="cta-button" disabled>Initialize Scanner</button>
+            </div>
+        </main>
+
+        <section class="dashboard-panel">
+            <h2 class="section-title">Behavioral Probability Matrix</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card" id="card-happy">
+                    <div class="card-header">
+                        <span class="metric-name">HAPPY / PLAYFUL</span>
+                        <span class="metric-value" id="pct-happy">0.0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-bar happy-bar" id="bar-happy"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card" id="card-relax">
+                    <div class="card-header">
+                        <span class="metric-name">RELAXED / CALM</span>
+                        <span class="metric-value" id="pct-relax">0.0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-bar relax-bar" id="bar-relax"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card" id="card-alert">
+                    <div class="card-header">
+                        <span class="metric-name">ALERT / ATTENTIVE</span>
+                        <span class="metric-value" id="pct-alert">0.0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-bar alert-bar" id="bar-alert"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card" id="card-angry">
+                    <div class="card-header">
+                        <span class="metric-name">ANGRY / DISTRESSED</span>
+                        <span class="metric-value" id="pct-angry">0.0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-bar angry-bar" id="bar-angry"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
