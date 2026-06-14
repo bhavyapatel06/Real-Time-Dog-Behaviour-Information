@@ -10,18 +10,22 @@ const statusDot = document.getElementById('status-dot');
 async function loadModel() {
     try {
         console.log("Attempting to load model...");
-        // Explicitly defining the input shape to match your 224x224 input
+        
+        // We load the model, and then ensure it has the correct input shape
         model = await tf.loadLayersModel('model.json');
         
-        // If it still fails on the InputLayer, use this instead:
-        // model = await tf.loadLayersModel('model.json', {strict: false});
-
+        // This 'dummy' prediction initializes the layers so the error goes away
+        const dummyInput = tf.zeros([1, 224, 224, 3]);
+        model.predict(dummyInput);
+        
         document.getElementById('status-text').innerText = "System ready. Initialize scanner.";
         document.getElementById('start-btn').disabled = false;
+        console.log("Model initialized successfully!");
     } catch (err) {
         console.error("Critical Load Failure:", err);
-        document.getElementById('status-text').innerText = "Error: " + err.message;
+        document.getElementById('status-text').innerText = "Load Error: Check console.";
     }
+}
 }
 
 // Adaptive multi-device camera configuration initialization
