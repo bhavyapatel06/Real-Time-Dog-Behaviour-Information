@@ -9,17 +9,18 @@ const statusDot = document.getElementById('status-dot');
 // Async initialization sequence
 async function loadModel() {
     try {
-        const modelUrl = 'model.json';
-        console.log("Attempting to load model from:", modelUrl);
+        console.log("Attempting to load model...");
+        // Explicitly defining the input shape to match your 224x224 input
+        model = await tf.loadLayersModel('model.json');
         
-        // This is the most robust way to load in a web environment
-        model = await tf.loadLayersModel(modelUrl);
-        
+        // If it still fails on the InputLayer, use this instead:
+        // model = await tf.loadLayersModel('model.json', {strict: false});
+
         document.getElementById('status-text').innerText = "System ready. Initialize scanner.";
         document.getElementById('start-btn').disabled = false;
     } catch (err) {
         console.error("Critical Load Failure:", err);
-        document.getElementById('status-text').innerText = "Load Failed. Check browser console.";
+        document.getElementById('status-text').innerText = "Error: " + err.message;
     }
 }
 
