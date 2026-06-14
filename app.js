@@ -9,16 +9,17 @@ const statusDot = document.getElementById('status-dot');
 // Async initialization sequence
 async function loadModel() {
     try {
-        // Point to the local converted folder
-        model = await tf.loadLayersModel('model.json');
+        const modelUrl = 'model.json';
+        console.log("Attempting to load model from:", modelUrl);
         
-        statusText.innerText = "System ready. Initialize scanner window.";
-        statusDot.className = "status-indicator ready";
-        startBtn.disabled = false;
-    } catch (error) {
-        statusText.innerText = "Error loading intelligence package framework.";
-        statusDot.className = "status-indicator error";
-        console.error(error);
+        // This is the most robust way to load in a web environment
+        model = await tf.loadLayersModel(modelUrl);
+        
+        document.getElementById('status-text').innerText = "System ready. Initialize scanner.";
+        document.getElementById('start-btn').disabled = false;
+    } catch (err) {
+        console.error("Critical Load Failure:", err);
+        document.getElementById('status-text').innerText = "Load Failed. Check browser console.";
     }
 }
 
