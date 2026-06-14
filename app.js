@@ -10,7 +10,7 @@ const statusDot = document.getElementById('status-dot');
 async function loadModel() {
     try {
         // Point to the local converted folder
-        model = await tf.loadLayersModel('./model.json');
+        model = await tf.loadLayersModel('https://bhavyapatel06.github.io/Real-Time-Dog-Behaviour-Information/model.json');
         
         statusText.innerText = "System ready. Initialize scanner window.";
         statusDot.className = "status-indicator ready";
