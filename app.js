@@ -26,7 +26,7 @@ async function loadModel() {
         document.getElementById('status-text').innerText = "Load Error: Check console.";
     }
 }
-}
+
 
 // Adaptive multi-device camera configuration initialization
 async function setupCamera() {
