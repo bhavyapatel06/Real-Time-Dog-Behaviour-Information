@@ -1,7 +1,6 @@
 let model;
 const CLASS_NAMES = ['happy', 'angry', 'alert', 'relax'];
 
-let model;
 const videoElement = document.getElementById('webcam');
 const startBtn = document.getElementById('start-btn');
 const statusText = document.getElementById('status-text');
@@ -76,6 +75,16 @@ async function startMediaStream(config) {
 
 // Processing cycle looping framework
 async function predictFrame() {
+    // ─── SAFETY CHECK ──────────────────────────────────────────────────
+    // If the webcam is ready but the model is still downloading,
+    // this keeps the loop going safely without crashing the app!
+    if (!model) {
+        console.log("Waiting for AI model to finish loading...");
+        requestAnimationFrame(predictFrame);
+        return;
+    }
+    // ───────────────────────────────────────────────────────────────────
+
     if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
         const predictions = tf.tidy(() => {
             const img = tf.browser.fromPixels(videoElement);
