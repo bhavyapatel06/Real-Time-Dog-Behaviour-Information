@@ -8,19 +8,21 @@ const statusDot = document.getElementById('status-dot');
 
 async function loadModel() {
     try {
-        console.log("Attempting to load model...");
-        // This will now load perfectly because the JSON is patched
-        model = await tf.loadLayersModel('./model.json');
-        
-        const dummyInput = tf.zeros([1, 224, 224, 3]);
-        model.predict(dummyInput);
-        
-        statusText.innerText = "System ready. Initialize scanner.";
-        startBtn.disabled = false;
-        console.log("Model initialized successfully!");
-    } catch (err) {
-        console.error("Critical Load Failure:", err);
-        statusText.innerText = "Load Error: Check console.";
+
+        console.log("STEP 1");
+
+        model = await tf.loadLayersModel('model.json');
+
+        console.log("STEP 2");
+
+        statusText.innerText = "Model Loaded Successfully";
+
+        console.log("STEP 3");
+
+    } catch (error) {
+
+        console.error("Critical Load Failure:", error);
+
     }
 }
 
