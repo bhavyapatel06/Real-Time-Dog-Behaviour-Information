@@ -1,3 +1,4 @@
+let model;
 const CLASS_NAMES = ['happy', 'angry', 'alert', 'relax'];
 
 let model;
