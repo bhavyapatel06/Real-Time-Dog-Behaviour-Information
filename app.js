@@ -8,7 +8,6 @@ const statusDot = document.getElementById('status-dot');
 
 async function loadModel() {
     try {
-
         console.log("STEP 1");
 
         model = await tf.loadGraphModel('./model.json');
@@ -16,13 +15,15 @@ async function loadModel() {
         console.log("STEP 2");
 
         statusText.innerText = "Model Loaded Successfully";
+        
+        // ADD THIS LINE BELOW TO ENABLE THE BUTTON
+        startBtn.disabled = false; 
 
         console.log("STEP 3");
 
     } catch (error) {
-
         console.error("Critical Load Failure:", error);
-
+        statusText.innerText = "Model failed to load.";
     }
 }
 
@@ -32,9 +33,13 @@ async function setupCamera() {
     statusText.innerText = "Configuring hardware...";
 
     try {
-        // Mobile-first camera setup
+        // Updated with mobile-friendly 'ideal' constraints
         const stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: 'environment', width: 224, height: 224 },
+            video: { 
+                facingMode: 'environment', 
+                width: { ideal: 224 }, 
+                height: { ideal: 224 } 
+            },
             audio: false
         });
         videoElement.srcObject = stream;
@@ -45,7 +50,8 @@ async function setupCamera() {
         };
     } catch (err) {
         console.error("Camera Error:", err);
-        statusText.innerText = "Camera access denied.";
+        // This will print the actual error on your mobile screen if it still fails
+        statusText.innerText = `Camera access denied: ${err.name}`;
     }
 }
 
