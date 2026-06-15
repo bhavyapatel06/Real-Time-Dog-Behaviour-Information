@@ -11,7 +11,7 @@ async function loadModel() {
 
         console.log("STEP 1");
 
-        model = await tf.loadLayersModel('model.json');
+        model = await tf.loadGraphModel('model.json');
 
         console.log("STEP 2");
 
