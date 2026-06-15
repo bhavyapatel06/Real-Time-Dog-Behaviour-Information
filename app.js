@@ -1,5 +1,32 @@
 let model;
 const CLASS_NAMES = ['happy', 'angry', 'alert', 'relax'];
+// --- BROWSER BYPASS FOR KERAS AUGMENTATION LAYERS ---
+// This tells the browser to safely ignore training-only layers
+
+class RandomFlip extends tf.layers.Layer {
+    constructor(config) { super(config); }
+    computeOutputShape(inputShape) { return inputShape; }
+    call(inputs) { return inputs; } // Just pass the image through untouched
+    static get className() { return 'RandomFlip'; }
+}
+tf.serialization.registerClass(RandomFlip);
+
+class RandomRotation extends tf.layers.Layer {
+    constructor(config) { super(config); }
+    computeOutputShape(inputShape) { return inputShape; }
+    call(inputs) { return inputs; }
+    static get className() { return 'RandomRotation'; }
+}
+tf.serialization.registerClass(RandomRotation);
+
+class RandomZoom extends tf.layers.Layer {
+    constructor(config) { super(config); }
+    computeOutputShape(inputShape) { return inputShape; }
+    call(inputs) { return inputs; }
+    static get className() { return 'RandomZoom'; }
+}
+tf.serialization.registerClass(RandomZoom);
+// -----------------------------------------------------
 
 const videoElement = document.getElementById('webcam');
 const startBtn = document.getElementById('start-btn');
