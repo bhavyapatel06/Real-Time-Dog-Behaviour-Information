@@ -12,7 +12,7 @@ async function loadModel() {
         console.log("Attempting to load model...");
         
         // We load the model, and then ensure it has the correct input shape
-        model = await tf.loadLayersModel('model.json');
+        const model = await tf.loadLayersModel('./model.json');
         
         // This 'dummy' prediction initializes the layers so the error goes away
         const dummyInput = tf.zeros([1, 224, 224, 3]);
