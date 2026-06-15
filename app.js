@@ -9,10 +9,9 @@ const statusDot = document.getElementById('status-dot');
 async function loadModel() {
     try {
         console.log("Attempting to load model...");
-        // Use the path where your model.json is stored
+        // This will now load perfectly because the JSON is patched
         model = await tf.loadLayersModel('./model.json');
         
-        // Warm-up prediction
         const dummyInput = tf.zeros([1, 224, 224, 3]);
         model.predict(dummyInput);
         
@@ -31,6 +30,7 @@ async function setupCamera() {
     statusText.innerText = "Configuring hardware...";
 
     try {
+        // Mobile-first camera setup
         const stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'environment', width: 224, height: 224 },
             audio: false
