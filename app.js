@@ -9,56 +9,42 @@ const statusDot = document.getElementById('status-dot');
 async function loadModel() {
     try {
         console.log("Attempting to load model...");
-        
+        // Use the path where your model.json is stored
         model = await tf.loadLayersModel('./model.json');
         
+        // Warm-up prediction
         const dummyInput = tf.zeros([1, 224, 224, 3]);
         model.predict(dummyInput);
         
-        document.getElementById('status-text').innerText = "System ready. Initialize scanner.";
-        document.getElementById('start-btn').disabled = false;
+        statusText.innerText = "System ready. Initialize scanner.";
+        startBtn.disabled = false;
         console.log("Model initialized successfully!");
     } catch (err) {
         console.error("Critical Load Failure:", err);
-        document.getElementById('status-text').innerText = "Load Error: Check console.";
+        statusText.innerText = "Load Error: Check console.";
     }
 }
 
 async function setupCamera() {
     startBtn.style.display = 'none';
     videoElement.style.display = 'block';
-    statusText.innerText = "Configuring media capture hardware streams...";
-
-    let constraints = {
-        video: { facingMode: 'environment', width: 224, height: 224 },
-        audio: false
-    };
+    statusText.innerText = "Configuring hardware...";
 
     try {
-        await startMediaStream(constraints);
-    } catch (mobileError) {
-        console.warn("Rear environment camera not found. Executing standard fallback protocol...");
-        constraints = { video: true, audio: false };
-        
-        try {
-            await startMediaStream(constraints);
-        } catch (laptopError) {
-            statusText.innerText = "Capture initialization failure: Hardware unavailable.";
-            statusDot.className = "status-indicator error";
-            console.error(laptopError);
-        }
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment', width: 224, height: 224 },
+            audio: false
+        });
+        videoElement.srcObject = stream;
+        videoElement.onloadedmetadata = () => {
+            statusText.innerText = "Live processing active";
+            statusDot.className = "status-indicator active";
+            predictFrame();
+        };
+    } catch (err) {
+        console.error("Camera Error:", err);
+        statusText.innerText = "Camera access denied.";
     }
-}
-
-async function startMediaStream(config) {
-    const stream = await navigator.mediaDevices.getUserMedia(config);
-    videoElement.srcObject = stream;
-    
-    videoElement.onloadedmetadata = () => {
-        statusText.innerText = "Live processing pipeline telemetry active";
-        statusDot.className = "status-indicator active";
-        predictFrame();
-    };
 }
 
 async function predictFrame() {
@@ -68,49 +54,40 @@ async function predictFrame() {
     }
 
     if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
-        const predictions = tf.tidy(() => {
+        tf.tidy(() => {
             const img = tf.browser.fromPixels(videoElement);
             const resized = tf.image.resizeBilinear(img, [224, 224]);
             const normalized = resized.div(tf.scalar(127.5)).sub(tf.scalar(1));
             const batched = normalized.expandDims(0);
-            
-            return model.predict(batched).dataSync();
+            const prediction = model.predict(batched);
+            updateDashboard(prediction.dataSync());
         });
-
-        updateDashboard(predictions);
     }
     requestAnimationFrame(predictFrame);
 }
 
 function updateDashboard(scores) {
-    const targetEmotions = {
-        happy: scores[0],
-        angry: scores[1],
-        alert: scores[2],
-        relax: scores[3]
-    };
-
     let maxScore = -1;
     let winningEmotion = "";
     
     CLASS_NAMES.forEach((emotion, index) => {
-        const currentScore = scores[index];
-        if (currentScore > maxScore) {
-            maxScore = currentScore;
+        if (scores[index] > maxScore) {
+            maxScore = scores[index];
             winningEmotion = emotion;
         }
     });
 
-    CLASS_NAMES.forEach((emotion) => {
-        const pctValue = (targetEmotions[emotion] * 100).toFixed(1);
+    CLASS_NAMES.forEach((emotion, index) => {
+        const pctValue = (scores[index] * 100).toFixed(1);
+        const bar = document.getElementById(`bar-${emotion}`);
+        const text = document.getElementById(`pct-${emotion}`);
+        const card = document.getElementById(`card-${emotion}`);
         
-        document.getElementById(`bar-${emotion}`).style.width = `${pctValue}%`;
-        document.getElementById(`pct-${emotion}`).innerText = `${pctValue}%`;
-        
-        if (emotion === winningEmotion) {
-            document.getElementById(`card-${emotion}`).classList.add('active-state');
-        } else {
-            document.getElementById(`card-${emotion}`).classList.remove('active-state');
+        if(bar) bar.style.width = `${pctValue}%`;
+        if(text) text.innerText = `${pctValue}%`;
+        if(card) {
+            if (emotion === winningEmotion) card.classList.add('active-state');
+            else card.classList.remove('active-state');
         }
     });
 }
