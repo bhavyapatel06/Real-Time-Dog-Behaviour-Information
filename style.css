@@ -242,3 +242,61 @@ video {
 .relax-bar { background: var(--clr-relax); }
 .alert-bar { background: var(--clr-alert); }
 .angry-bar { background: var(--clr-angry); }
+
+/* =========================================
+   FOOTER STYLES 
+========================================= */
+.app-footer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.social-links {
+    display: flex;
+    gap: 20px;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.social-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+/* Hover effects for the icons */
+.social-icon:hover {
+    color: var(--text-primary);
+    transform: translateY(-3px);
+}
+
+.footer-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.made-by {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.copyright {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
